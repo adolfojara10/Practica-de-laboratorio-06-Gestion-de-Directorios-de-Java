@@ -17,10 +17,18 @@ public class ControladorDirectorio {
     private String ruta;
     private File archivo;
     private File[] archivos;
-    private List<String> lista;
 
     public ControladorDirectorio() {
-        lista = new ArrayList<>();
+
+    }
+
+    public boolean comprobarRuta(String ruta) {
+        archivo = new File(ruta);
+        if (archivo.exists()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -29,18 +37,24 @@ public class ControladorDirectorio {
      * @return
      */
     public List<String> listarArchivos(String ruta) {
+        List<String> lista = new ArrayList<>();
+        lista.clear();
         archivo = new File(ruta);
         archivos = archivo.listFiles();
 
         for (File elemento : archivos) {
-            lista.add(elemento.getName());
+            if (!elemento.isHidden()) {
+                lista.add(elemento.getName());
+            }
+
         }
 
         return lista;
     }
 
     public List<String> listarArchivosOcultos(String ruta) {
-
+        List<String> lista = new ArrayList<>();
+        lista.clear();
         archivo = new File(ruta);
         archivos = archivo.listFiles();
 
@@ -54,8 +68,8 @@ public class ControladorDirectorio {
             if (elemento.isDirectory()) {
                 File[] subdirectorios = elemento.listFiles();
                 for (File subelemento : subdirectorios) {
-                    if (subelemento.isHidden()) {
-                        lista.add(elemento.getName());
+                    if (subelemento.isHidden() && subelemento.isFile()) {
+                        lista.add(subelemento.getName());
                     }
 
                 }
@@ -67,7 +81,8 @@ public class ControladorDirectorio {
     }
 
     public List<String> listarDirectoriosOcultos(String ruta) {
-
+        List<String> lista = new ArrayList<>();
+        lista.clear();
         archivo = new File(ruta);
         archivos = archivo.listFiles();
 
