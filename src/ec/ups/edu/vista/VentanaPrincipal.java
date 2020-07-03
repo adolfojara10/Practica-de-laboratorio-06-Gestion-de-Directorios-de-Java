@@ -6,7 +6,10 @@
 package ec.ups.edu.vista;
 
 import ec.ups.edu.controlador.ControladorDirectorio;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
@@ -206,10 +209,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         eliminarDirectorio.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         eliminarDirectorio.setText("Eliminar");
+        eliminarDirectorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarDirectorioActionPerformed(evt);
+            }
+        });
         jMenu1.add(eliminarDirectorio);
 
         renombrarDirectorio.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
         renombrarDirectorio.setText("Renombrar");
+        renombrarDirectorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                renombrarDirectorioActionPerformed(evt);
+            }
+        });
         jMenu1.add(renombrarDirectorio);
 
         salir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, java.awt.event.InputEvent.CTRL_MASK));
@@ -370,6 +383,48 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         txtAreaInformacion.setText(informacion);
 
     }//GEN-LAST:event_btnMostrarInformacionActionPerformed
+
+    private void renombrarDirectorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_renombrarDirectorioActionPerformed
+        // TODO add your handling code here:
+        String renombre = null;
+
+        renombre = JOptionPane.showInputDialog("Escriba el nombre del nuevo directorio");
+        if (renombre == null) {
+            JOptionPane.showMessageDialog(this, "Agregue un nombre al directorio");
+        } else {
+            String ruta = txtRuta.getText();
+            if (controladorDirectorio.comprobarRuta(ruta)) {
+                String actual = lista.getSelectedValue();
+                controladorDirectorio.renombrarDirectorio(ruta, actual, renombre);
+                List<String> directorio = controladorDirectorio.listarArchivos(ruta);
+                llenarLista(directorio);
+            } else {
+                JOptionPane.showMessageDialog(this, "Escriba la ruta correcta");
+            }
+        }
+
+
+    }//GEN-LAST:event_renombrarDirectorioActionPerformed
+
+    private void eliminarDirectorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarDirectorioActionPerformed
+        // TODO add your handling code here:
+        int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro deseas eliminar este directorio?");
+        if (opcion == JOptionPane.YES_OPTION) {
+            try {
+                String eliminar = lista.getSelectedValue();
+                String ruta = txtRuta.getText();
+                controladorDirectorio.eliminarDirectorio(ruta, eliminar);
+                List<String> directorio = controladorDirectorio.listarArchivos(ruta);
+                llenarLista(directorio);
+                JOptionPane.showMessageDialog(this, "Directorio eliminado correctamente");
+            } catch (IOException ex) {
+                Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        List<String> directorio = controladorDirectorio.listarArchivos(txtRuta.getText());
+        llenarLista(directorio);
+
+    }//GEN-LAST:event_eliminarDirectorioActionPerformed
 
     /**
      * @param args the command line arguments

@@ -8,6 +8,8 @@ package ec.ups.edu.controlador;
 import java.util.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,16 +34,16 @@ public class ControladorDirectorio {
         }
     }
 
-    public boolean comprobarExistencia(String ruta, String nombre){
+    public boolean comprobarExistencia(String ruta, String nombre) {
         archivo = new File(ruta + File.separator + nombre);
-        if(archivo.exists()){
+        if (archivo.exists()) {
             return true;
         } else {
             return false;
         }
-        
+
     }
-    
+
     public List<String> listarArchivos(String ruta) {
         List<String> lista = new ArrayList<>();
         lista.clear();
@@ -160,10 +162,80 @@ public class ControladorDirectorio {
 
         return informacion;
     }
-    
-    public void crearDirectorio(String ruta, String nombre){
+
+    public void crearDirectorio(String ruta, String nombre) {
         archivo = new File(ruta + File.separator + nombre);
         archivo.mkdir();
+    }
+
+    public void renombrarDirectorio(String ruta, String actual, String renombre) {
+        archivo = new File(ruta + File.separator + actual);
+
+        File nuevo = new File(ruta + File.separator + renombre);
+        archivo.renameTo(nuevo);
+    }
+
+    public void eliminarDirectorio(String ruta, String eliminar) throws IOException {
+        archivo = new File(ruta + File.separator + eliminar);
+        if (archivo.isDirectory()) {
+            archivos = archivo.listFiles();
+            /* if (archivos.length != 0) {
+                for (File elemento : archivos) {
+                    if (elemento.isDirectory()) {
+                        File[] subarchivos = elemento.listFiles();
+                        for (File ele : subarchivos) {
+                            ele.delete();
+                        }
+                    } else {
+                        elemento.delete();
+                    }
+                }
+            } else {
+                archivo.delete();
+            }*/
+
+            for (int i = 0; i < archivos.length; i++) {
+                if (archivos[i].isDirectory()) {
+                    eliminarDirectorio2(archivos[i]);
+                } else {
+                    archivos[i].delete();
+                }
+            }
+            archivo.delete();
+        } else {
+            /*FileInputStream readArchivo = null;
+            try {
+                readArchivo = new FileInputStream(archivo);
+                try {
+                    readArchivo.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(ControladorDirectorio.class.getName()).log(Level.SEVERE, null, ex);
+                }*/
+                archivo.delete();
+          /*  } catch (FileNotFoundException ex) {
+                Logger.getLogger(ControladorDirectorio.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    readArchivo.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(ControladorDirectorio.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }*/
+        }
+
+    }
+    
+    public void eliminarDirectorio2(File path){
+        File [] files = path.listFiles();
+        for(int i = 0;i<files.length;i++){
+            if(files[i].isDirectory()){
+                eliminarDirectorio2(files[i]);
+            } else {
+                files[i].delete();
+            }
+        }
+        path.delete();
+        
     }
 
 }
