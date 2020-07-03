@@ -108,9 +108,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(68, 68, 68))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(106, 106, 106)
                 .addComponent(btnMostrarInformacion)
@@ -177,8 +177,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addGap(75, 75, 75)
                         .addComponent(btnListarDirectoriosOcultos))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(txtRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(9, 9, 9)
+                        .addComponent(txtRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -271,22 +271,37 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         String ruta = txtRuta.getText();
 
-        if (ruta == null) {
-            JOptionPane.showMessageDialog(this, "Llene el campo de ruta para buscar un directorio");
-        } else {
-            if (controladorDirectorio.comprobarRuta(ruta)) {
-                List<String> directorios = controladorDirectorio.listarArchivos(ruta);
-                if (directorios.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "El directorio esta vacio");
-                    limpiarLista();
-                } else {
-                    llenarLista(directorios);
-                }
+        String subdirectorio = lista.getSelectedValue();
+
+        if (subdirectorio != null) {
+            List<String> directorios = controladorDirectorio.buscarPorNombre(ruta, subdirectorio);
+            //
+            txtRuta.setText(controladorDirectorio.devolverRuta(ruta, subdirectorio));
+            if (directorios.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El directorio esta vacio");
+
+                limpiarLista();
             } else {
-                JOptionPane.showMessageDialog(this, "Ruta del directorio incorrecta");
+                llenarLista(directorios);
+            }
+        } else {
+            if (ruta == null) {
+                JOptionPane.showMessageDialog(this, "Llene el campo de ruta para buscar un directorio");
+            } else {
+                if (controladorDirectorio.comprobarRuta(ruta)) {
+                    List<String> directorios = controladorDirectorio.listarArchivos(ruta);
+                    if (directorios.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "El directorio esta vacio");
+                        limpiarLista();
+                    } else {
+                        llenarLista(directorios);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Ruta del directorio incorrecta");
+
+                }
 
             }
-
         }
     }//GEN-LAST:event_btnListarDirectoriosActionPerformed
 
@@ -353,6 +368,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     int opcion = JOptionPane.showConfirmDialog(this, "La carpeta ya existe, ¿desea reemplazarla?");
                     if (opcion == JOptionPane.YES_OPTION) {
                         controladorDirectorio.crearDirectorio(ruta, nuevo);
+                        JOptionPane.showMessageDialog(this, "Directorio creado correctamente");
                         List<String> directorio = controladorDirectorio.listarArchivos(ruta);
                         llenarLista(directorio);
                     }
@@ -396,6 +412,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             if (controladorDirectorio.comprobarRuta(ruta)) {
                 String actual = lista.getSelectedValue();
                 controladorDirectorio.renombrarDirectorio(ruta, actual, renombre);
+                JOptionPane.showMessageDialog(this, "Directorio actualizado");
                 List<String> directorio = controladorDirectorio.listarArchivos(ruta);
                 llenarLista(directorio);
             } else {
