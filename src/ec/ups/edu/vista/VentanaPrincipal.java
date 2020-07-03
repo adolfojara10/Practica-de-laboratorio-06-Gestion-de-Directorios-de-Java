@@ -75,6 +75,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         lista.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(102, 102, 102), null));
         lista.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lista.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(lista);
 
         txtAreaInformacion.setEditable(false);
@@ -86,6 +91,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         btnMostrarInformacion.setBackground(new java.awt.Color(102, 102, 255));
         btnMostrarInformacion.setText("Mostrar Información");
+        btnMostrarInformacion.setEnabled(false);
+        btnMostrarInformacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMostrarInformacionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -314,10 +325,42 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void crearDirectorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearDirectorioActionPerformed
         // TODO add your handling code here:
-        String nuevo = JOptionPane.showInputDialog("Escriba el nombre del nuevo directorio");
+        String nuevo = null;
+
+        nuevo = JOptionPane.showInputDialog("Escriba el nombre del nuevo directorio");
+        if (nuevo == null) {
+            JOptionPane.showMessageDialog(this, "Agregue un nombre al directorio");
+        } else {
+            System.out.println(nuevo);
+            String ruta = txtRuta.getText();
+            if (ruta == null) {
+                JOptionPane.showMessageDialog(this, "Llene el campo de ruta para crear un nuevo directorio");
+            } else {
+                if (controladorDirectorio.comprobarRuta(ruta)) {
+
+                }
+            }
+        }
 
 
     }//GEN-LAST:event_crearDirectorioActionPerformed
+
+    private void listaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaMouseClicked
+        // TODO add your handling code here:
+        String nombre = lista.getSelectedValue();
+        btnMostrarInformacion.setEnabled(true);
+        System.out.println(nombre);
+    }//GEN-LAST:event_listaMouseClicked
+
+    private void btnMostrarInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarInformacionActionPerformed
+        // TODO add your handling code here:
+        String nombre = lista.getSelectedValue();
+        String ruta = txtRuta.getText();
+
+        String informacion = controladorDirectorio.mostrarInformacion(nombre, ruta);
+        txtAreaInformacion.setText(informacion);
+
+    }//GEN-LAST:event_btnMostrarInformacionActionPerformed
 
     /**
      * @param args the command line arguments
