@@ -336,12 +336,21 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             if (ruta == null) {
                 JOptionPane.showMessageDialog(this, "Llene el campo de ruta para crear un nuevo directorio");
             } else {
-                if (controladorDirectorio.comprobarRuta(ruta)) {
+                if (controladorDirectorio.comprobarExistencia(ruta, nuevo)) {
+                    int opcion = JOptionPane.showConfirmDialog(this, "La carpeta ya existe, ¿desea reemplazarla?");
+                    if (opcion == JOptionPane.YES_OPTION) {
+                        controladorDirectorio.crearDirectorio(ruta, nuevo);
+                        List<String> directorio = controladorDirectorio.listarArchivos(ruta);
+                        llenarLista(directorio);
+                    }
 
+                } else {
+                    controladorDirectorio.crearDirectorio(ruta, nuevo);
+                    List<String> directorio = controladorDirectorio.listarArchivos(ruta);
+                    llenarLista(directorio);
                 }
             }
         }
-
 
     }//GEN-LAST:event_crearDirectorioActionPerformed
 

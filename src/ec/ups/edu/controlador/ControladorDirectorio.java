@@ -32,11 +32,16 @@ public class ControladorDirectorio {
         }
     }
 
-    /**
-     *
-     * @param ruta
-     * @return
-     */
+    public boolean comprobarExistencia(String ruta, String nombre){
+        archivo = new File(ruta + File.separator + nombre);
+        if(archivo.exists()){
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+    
     public List<String> listarArchivos(String ruta) {
         List<String> lista = new ArrayList<>();
         lista.clear();
@@ -154,6 +159,11 @@ public class ControladorDirectorio {
         }
 
         return informacion;
+    }
+    
+    public void crearDirectorio(String ruta, String nombre){
+        archivo = new File(ruta + File.separator + nombre);
+        archivo.mkdir();
     }
 
 }
