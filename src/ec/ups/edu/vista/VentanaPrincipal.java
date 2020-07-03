@@ -275,8 +275,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         if (subdirectorio != null) {
             List<String> directorios = controladorDirectorio.buscarPorNombre(ruta, subdirectorio);
+            
             //
             txtRuta.setText(controladorDirectorio.devolverRuta(ruta, subdirectorio));
+            subdirectorio = null;
             if (directorios.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "El directorio esta vacio");
 
