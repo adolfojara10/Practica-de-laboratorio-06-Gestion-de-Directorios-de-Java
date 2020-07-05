@@ -165,7 +165,17 @@ public class ControladorDirectorio {
 
     public void crearDirectorio(String ruta, String nombre) {
         archivo = new File(ruta + File.separator + nombre);
-        archivo.mkdir();
+        try {
+            if (nombre.contains(".")) {
+
+                archivo.createNewFile();
+            } else {
+                archivo.mkdir();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ControladorDirectorio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public void renombrarDirectorio(String ruta, String actual, String renombre) {
@@ -193,7 +203,7 @@ public class ControladorDirectorio {
             } else {
                 archivo.delete();
             }*/
-
+            
             for (int i = 0; i < archivos.length; i++) {
                 if (archivos[i].isDirectory()) {
                     eliminarDirectorio2(archivos[i]);
@@ -222,7 +232,7 @@ public class ControladorDirectorio {
                 }
             }*/
         }
-        if(archivo.exists()){
+        if (archivo.exists()) {
             archivo.delete();
         }
 
@@ -248,13 +258,13 @@ public class ControladorDirectorio {
         for (File archivo1 : archivos) {
             lista.add(archivo1.getName());
         }
-        
+
         return lista;
     }
-    
-    public String devolverRuta(String ruta, String nombre){
+
+    public String devolverRuta(String ruta, String nombre) {
         archivo = new File(ruta + File.separator + nombre);
-        
+
         return archivo.getAbsolutePath();
     }
 
