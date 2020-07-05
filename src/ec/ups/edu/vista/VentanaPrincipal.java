@@ -37,12 +37,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             modelo.addElement(nombre);
         }
         lista.setModel(modelo);
+        txtAreaInformacion.setText("");
+        btnMostrarInformacion.setEnabled(false);
     }
 
     public void limpiarLista() {
         DefaultListModel modelo = new DefaultListModel();
         modelo.clear();
         lista.setModel(modelo);
+        txtAreaInformacion.setText("");
+        btnMostrarInformacion.setEnabled(false);
     }
 
     /**
@@ -399,7 +403,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         String informacion = controladorDirectorio.mostrarInformacion(nombre, ruta);
         txtAreaInformacion.setText(informacion);
-
+        lista.clearSelection();
+        btnMostrarInformacion.setEnabled(false);
     }//GEN-LAST:event_btnMostrarInformacionActionPerformed
 
     private void renombrarDirectorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_renombrarDirectorioActionPerformed
