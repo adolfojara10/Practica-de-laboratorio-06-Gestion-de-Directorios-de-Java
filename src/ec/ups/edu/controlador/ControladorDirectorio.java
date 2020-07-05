@@ -222,6 +222,9 @@ public class ControladorDirectorio {
                 }
             }*/
         }
+        if(archivo.exists()){
+            archivo.delete();
+        }
 
     }
 
